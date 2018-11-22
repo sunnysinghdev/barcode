@@ -1,0 +1,107 @@
+<!DOCHTML>
+<html>
+
+<body>
+    <h1>Test</h1>
+    <p id="response"></p>
+    <br>
+    <p id="response3"></p>
+    <br>
+    <input id="code">
+    <button type="button" onclick="sendCode();">Send</button>
+    <p id="response2"></p>
+</body>
+<script>
+    function handler() {
+        if (this.status == 200) {
+            // success!
+            var rawdata = this.response;
+            document.getElementById("response").innerText = this.response;
+            // var arr = JSON.parse(rawdata);
+            // var count = 0;
+            // for (var index in arr) {
+            //     Contacts[arr[index].flat_number] = arr[index];
+            //     count++;
+            // }
+            // App.dataLoaded = true;
+            //document.getElementById("count").innerText = count;
+        } else {
+
+        }
+    }
+
+    function handlerPost() {
+        if (this.status == 200) {
+            // success!
+            var rawdata = this.response;
+            document.getElementById("response2").innerText = this.response;
+            // var arr = JSON.parse(rawdata);
+            // var count = 0;
+            // for (var index in arr) {
+            //     Contacts[arr[index].flat_number] = arr[index];
+            //     count++;
+            // }
+            // App.dataLoaded = true;
+            //document.getElementById("count").innerText = count;
+        } else {
+
+        }
+    }
+
+    function handlerStart() {
+        if (this.status == 200) {
+            // success!
+            var rawdata = this.response;
+            document.getElementById("response3").innerText = this.response;
+            setInterval(function() {
+                sendRequest();
+            }, 1000);
+            // var arr = JSON.parse(rawdata);
+            // var count = 0;
+            // for (var index in arr) {
+            //     Contacts[arr[index].flat_number] = arr[index];
+            //     count++;
+            // }
+            // App.dataLoaded = true;
+            //document.getElementById("count").innerText = count;
+        } else {
+
+        }
+    }
+
+    function sendRequest() {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = handler;
+        xhr.open('GET', 'barcode.php?user_id=' + _userId + '&action=code');
+        //xhr.open('POST', apiEndPointUrl + '/dsmax/db/all');
+        xhr.setRequestHeader('Content-type', 'application/json');
+        //xhr.send(JSON.stringify(req));
+        xhr.send();
+    }
+
+    function start(user) {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = handlerStart;
+        xhr.open('GET', 'barcode.php?user_id=' + user + '&action=create');
+        //xhr.open('POST', apiEndPointUrl + '/dsmax/db/all');
+        //xhr.setRequestHeader('Content-type', 'application/json');
+        //xhr.send(JSON.stringify(req));
+        xhr.send();
+    }
+
+    function sendCode() {
+        var req = {};
+        req.user_id = _userId;
+        req.code = document.getElementById("code").value;
+        var xhr = new XMLHttpRequest();
+        xhr.onload = handlerPost;
+        //xhr.open('GET', 'barcode.php');
+        xhr.open('POST', 'barcode.php');
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send(JSON.stringify(req));
+        //xhr.send();
+    }
+    var _userId = 'sunny' + Math.floor((Math.random() * 10) + 1)
+    start(_userId);
+</script>
+<html>
